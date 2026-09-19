@@ -223,7 +223,6 @@ export const CATEGORY_LABEL: Record<MessageCategory, string> = {
   other: "أخرى",
 };
 
-<<<<<<< HEAD
 export const LINK_CATEGORIES: LinkCategory[] = [
   "sessions",
   "communication",
@@ -236,7 +235,8 @@ export const LINK_CATEGORY_LABEL: Record<LinkCategory, string> = {
   communication: "التواصل",
   files: "الملفات",
   admin: "الإدارة",
-=======
+};
+
 export const CATEGORY_STYLE: Record<MessageCategory, string> = {
   sessions: "bg-sky-50 text-sky-700 ring-sky-200",
   parents: "bg-emerald-50 text-emerald-700 ring-emerald-200",
@@ -244,7 +244,6 @@ export const CATEGORY_STYLE: Record<MessageCategory, string> = {
   reminder: "bg-amber-50 text-amber-700 ring-amber-200",
   followup: "bg-cyan-50 text-cyan-700 ring-cyan-200",
   other: "bg-slate-50 text-slate-600 ring-slate-200",
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
 };
 
 export const FILE_CATEGORIES: FileCategory[] = [
@@ -263,7 +262,6 @@ export const FILE_CATEGORY_LABEL: Record<FileCategory, string> = {
   other: "أخرى",
 };
 
-<<<<<<< HEAD
 export const FILE_TYPE_LABEL: Record<FileType, string> = {
   pdf: "PDF",
   doc: "مستند",
@@ -271,12 +269,12 @@ export const FILE_TYPE_LABEL: Record<FileType, string> = {
   image: "صورة",
   slides: "عرض",
   link: "رابط",
-=======
+};
+
 export const TASK_TYPE_STYLE: Record<TaskType, string> = {
   routine: "bg-sky-50 text-sky-700 ring-sky-200",
   scheduled: "bg-cyan-50 text-cyan-700 ring-cyan-200",
   special: "bg-violet-50 text-violet-700 ring-violet-200",
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
 };
 
 export function specialTaskType(task: SpecialTask): TaskType {

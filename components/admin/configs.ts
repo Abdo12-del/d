@@ -72,43 +72,6 @@ const guideIconOptions = [
 ].map((k) => ({ value: k, label: k }));
 
 export const RESOURCES: Record<string, ResourceConfig> = {
-<<<<<<< HEAD
-=======
-  routine: {
-    key: "routine",
-    label: "المهام المعتادة",
-    emoji: "🔄",
-    table: TABLES.routine,
-    queryKey: QUERY_KEYS.routine,
-    singular: "مهمة معتادة",
-    fields: [
-      { key: "title", label: "اسم المهمة", type: "text", required: true, placeholder: "مثال: متابعة الرسائل الواردة" },
-      {
-        key: "frequency",
-        label: "التكرار",
-        type: "select",
-        options: (["daily", "weekly", "monthly"] as Frequency[]).map((f) => ({
-          value: f,
-          label: FREQUENCY_LABEL[f],
-        })),
-      },
-      { key: "when_note", label: "متى تُنفّذ؟", type: "text", placeholder: "مثال: أول ساعة من الدوام — 09:00" },
-      { key: "what_note", label: "ماذا أفعل؟", type: "textarea", placeholder: "وصف مختصر لما تقوم به في هذه المهمة" },
-      { key: "steps", label: "الخطوات", type: "steps" },
-    ],
-    defaults: { title: "", frequency: "daily", when_note: "", what_note: "", steps: [] },
-    rowTitle: (r) => r.title,
-    rowSubtitle: (r) => r.when_note || null,
-    rowBadge: (r) => FREQUENCY_LABEL[r.frequency as Frequency] ?? null,
-    badgeClass: (r) =>
-      r.frequency === "daily"
-        ? "bg-sky-100 text-sky-700"
-        : r.frequency === "weekly"
-          ? "bg-violet-100 text-violet-700"
-          : "bg-amber-100 text-amber-700",
-  },
-
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
   special: {
     key: "special",
     label: "المهام الخاصة",

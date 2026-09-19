@@ -31,20 +31,36 @@ export function PageHeader({
   title,
   desc,
   action,
+  icon: Icon,
+  tone = "sky",
 }: {
   title: string;
   desc: string;
   action?: ReactNode;
+  icon?: LucideIcon;
+  tone?: keyof typeof TONE_STYLES;
 }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
-      <div>
-        <h1 className="text-2xl font-black tracking-tight text-slate-800 sm:text-[28px]">
-          {title}
-        </h1>
-        <p className="mt-1.5 text-sm font-medium leading-relaxed text-slate-400">
-          {desc}
-        </p>
+      <div className="flex items-center gap-3">
+        {Icon && (
+          <span
+            className={cn(
+              "flex h-11 w-11 shrink-0 -rotate-3 items-center justify-center rounded-2xl shadow-soft-sm",
+              TONE_STYLES[tone],
+            )}
+          >
+            <Icon className="h-5 w-5" />
+          </span>
+        )}
+        <div>
+          <h1 className="text-2xl font-black tracking-tight text-slate-800 sm:text-[28px]">
+            {title}
+          </h1>
+          <p className="mt-1.5 text-sm font-medium leading-relaxed text-slate-400">
+            {desc}
+          </p>
+        </div>
       </div>
       {action}
     </div>
@@ -259,6 +275,38 @@ export function LoadingRows({ count = 4 }: { count?: number }) {
           key={i}
           className="h-14 animate-pulse rounded-xl border border-slate-100 bg-white"
         />
+      ))}
+    </div>
+  );
+}
+
+/* ─── هياكل تحميل على شكل بطاقات ─── */
+export function LoadingCards({
+  count = 4,
+  className,
+}: {
+  count?: number;
+  className?: string;
+}) {
+  return (
+    <div className={cn("grid gap-3 sm:grid-cols-2 lg:grid-cols-3", className)}>
+      {Array.from({ length: count }).map((_, i) => (
+        <div
+          key={i}
+          className="rounded-[24px] border border-slate-100 bg-white p-5 shadow-soft-sm"
+        >
+          <div className="flex items-center gap-3">
+            <div className="h-11 w-11 shrink-0 animate-pulse rounded-2xl bg-slate-100" />
+            <div className="min-w-0 flex-1 space-y-2">
+              <div className="h-3.5 w-2/3 animate-pulse rounded-full bg-slate-100" />
+              <div className="h-3 w-1/3 animate-pulse rounded-full bg-slate-100" />
+            </div>
+          </div>
+          <div className="mt-4 space-y-2">
+            <div className="h-3 w-full animate-pulse rounded-full bg-slate-100" />
+            <div className="h-3 w-4/5 animate-pulse rounded-full bg-slate-100" />
+          </div>
+        </div>
       ))}
     </div>
   );

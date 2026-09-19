@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import {
   CalendarClock,
   Check,
@@ -23,18 +22,6 @@ import {
   StepsList,
   copyToClipboard,
 } from "@/components/shared";
-=======
-import { useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
-import { Repeat } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
-import {
-  EmptyState,
-  PageHeader,
-  SectionTitle,
-} from "@/components/shared";
-import { cn } from "@/lib/utils";
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
 import {
   AlertDialog,
   AlertDialogAction,
@@ -104,20 +91,13 @@ const TRACK_DESC: Record<Frequency, string> = {
 };
 
 export default function Routine() {
-<<<<<<< HEAD
   const { data: routines = [], isLoading } = useRoutineTasks();
-=======
-  const [params, setParams] = useSearchParams();
-  const freq = (params.get("freq") as Frequency) || "daily";
-  const { data: tasks = [] } = useRoutineTasks();
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
   const { data: completions = [] } = useCompletions();
   const { data: links = [] } = useLinks();
   const { data: messages = [] } = useMessages();
   const qc = useQueryClient();
   const toggleDone = useToggleRoutineDone();
 
-<<<<<<< HEAD
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<RoutineTask | null>(null);
   const [deleting, setDeleting] = useState<RoutineTask | null>(null);
@@ -187,24 +167,10 @@ export default function Routine() {
     );
   };
 
-=======
-  const setFreq = (f: Frequency) => setParams(f === "daily" ? {} : { freq: f });
-
-  const byTrack = useMemo(
-    () =>
-      FREQUENCY_ORDER.reduce(
-        (acc, f) => ({ ...acc, [f]: tasks.filter((t) => t.frequency === f) }),
-        {} as Record<Frequency, typeof tasks>,
-      ),
-    [tasks],
-  );
-
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
   return (
     <div className="space-y-7">
 
       <PageHeader
-<<<<<<< HEAD
         title="روتيني"
         desc="ما الذي يتكرر؟ أنشئ قوالب الروتين بنفسك، وستتولّد مهامها تلقائيًا في مواعيدها."
         action={
@@ -516,157 +482,6 @@ export default function Routine() {
         task={drawerTask}
         onClose={() => setDrawerTask(null)}
       />
-=======
-        icon={Repeat}
-        title="نظامك المعتاد 🔄"
-        desc="أفعالك المتكررة في ثلاثة مسارات زمنية — علّم على كل مهمة تنجزها."
-      />
-
-      {/* مبدّل المسارات */}
-      <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
-        {FREQUENCY_ORDER.map((f) => {
-          const active = f === freq;
-          return (
-            <button
-              key={f}
-              onClick={() => setFreq(f)}
-              className={cn(
-                "press flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 font-display text-sm font-extrabold transition-all",
-                active
-                  ? `border-transparent bg-gradient-to-l ${TRACK_ACCENT[f]} text-white shadow-soft`
-                  : "border-sky-100 bg-white text-slate-500 shadow-soft-sm hover:bg-sky-50",
-              )}
-            >
-              {FREQUENCY_LABEL[f]}
-              <span
-                className={cn(
-                  "rounded-full px-1.5 text-[11px] font-black",
-                  active ? "bg-white/25 text-white" : "bg-sky-50 text-sky-600",
-                )}
-              >
-                {byTrack[f].length}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* المسار النشط */}
-      <section>
-        <SectionTitle
-          emoji={freq === "daily" ? "☀️" : freq === "weekly" ? "📆" : "🗓️"}
-          title={`${FREQUENCY_LABEL[freq]} — ${TRACK_DESC[freq]}`}
-          desc={lastDoneLabel(byTrack[freq], completions) ?? "لم تبدأ هذا المسار بعد"}
-        />
-
-        {byTrack[freq].length === 0 ? (
-          <EmptyState
-            title={`لا توجد مهام ${FREQUENCY_LABEL[freq]} بعد`}
-            hint="أضفها من صفحة الإدارة ليُبنى مسارك"
-          />
-        ) : (
-          <>
-            <div className="card-soft mb-4 flex items-center gap-3 p-4">
-              <Progress
-                value={
-                  (byTrack[freq].filter((t) =>
-                    isTaskDone(completions, t.id, t.frequency),
-                  ).length /
-                    byTrack[freq].length) *
-                  100
-                }
-                className="h-2.5 flex-1 bg-slate-100"
-              />
-              <span className="font-display text-xs font-extrabold text-emerald-600">
-                {
-                  byTrack[freq].filter((t) =>
-                    isTaskDone(completions, t.id, t.frequency),
-                  ).length
-                }{" "}
-                / {byTrack[freq].length} {PERIOD_WORD[freq]}
-              </span>
-            </div>
-
-            <div className="space-y-3">
-              {byTrack[freq].map((task) => {
-                const done = isTaskDone(completions, task.id, task.frequency);
-                return (
-                  <div
-                    key={task.id}
-                    className={cn(
-                      "card-soft p-4 transition sm:p-5",
-                      done && "border-emerald-200 bg-emerald-50/40",
-                    )}
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-2.5">
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() => toggle.mutate({ task, makeDone: !done })}
-                          aria-label={done ? "إلغاء الإنجاز" : "تأكيد الإنجاز"}
-                          className={cn(
-                            "press flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl transition",
-                            done
-                              ? "animate-check-pop bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-soft-sm"
-                              : "border-2 border-dashed border-sky-300 text-transparent hover:border-sky-400 hover:bg-sky-50",
-                          )}
-                        >
-                          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M20 6L9 17l-5-5" />
-                          </svg>
-                        </button>
-                        <div>
-                          <h3
-                            className={cn(
-                              "font-display text-[15px] font-extrabold sm:text-base",
-                              done ? "text-emerald-700 line-through decoration-emerald-300" : "text-sky-950",
-                            )}
-                          >
-                            {task.title}
-                          </h3>
-                          {task.when_note && (
-                            <p className="text-[11.5px] font-bold text-slate-400">
-                              ⏰ {task.when_note}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-
-                      {task.steps.length > 0 && (
-                        <span className="rounded-full bg-sky-50 px-2.5 py-1 text-[11px] font-extrabold text-sky-600">
-                          {task.steps.length} خطوات
-                        </span>
-                      )}
-                    </div>
-
-                    {(task.what_note || task.steps.length > 0) && (
-                      <div className="mt-3 space-y-2 rounded-2xl bg-sky-50/60 p-3.5">
-                        {task.what_note && (
-                          <p className="text-[13px] font-semibold leading-relaxed text-slate-600">
-                            {task.what_note}
-                          </p>
-                        )}
-                        {task.steps.length > 0 && (
-                          <ol className="flex flex-wrap gap-x-4 gap-y-1.5">
-                            {task.steps.map((step, i) => (
-                              <li key={i} className="flex items-center gap-1.5 text-[12px] font-extrabold text-slate-500">
-                                <span className="flex h-5 w-5 items-center justify-center rounded-md bg-white font-display text-[10px] text-sky-600 shadow-soft-sm">
-                                  {String(i + 1).padStart(2, "0")}
-                                </span>
-                                {step}
-                              </li>
-                            ))}
-                          </ol>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </>
-        )}
-      </section>
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
     </div>
   );
 }

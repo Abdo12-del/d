@@ -61,7 +61,7 @@ export function Owl({
       ) : pose === "wave" || pose === "point" ? (
         <>
           <ellipse cx="46" cy="132" rx="16" ry="32" fill="#0284C7" transform="rotate(12 46 132)" />
-          <g transform={pose === "wave" ? "rotate(-46 172 96)" : "rotate(-24 172 100)}>
+          <g transform={pose === "wave" ? "rotate(-46 172 96)" : "rotate(-24 172 100)"}>
             <ellipse cx="176" cy="106" rx="16" ry="32" fill="#0284C7" />
           </g>
         </>

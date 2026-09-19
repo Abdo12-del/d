@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Check, ChevronLeft, Clock, ExternalLink, Users } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -16,26 +15,6 @@ import {
 } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { iconByName } from "@/lib/icons";
-=======
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import NowCard from "@/components/NowCard";
-import RoutineTracks from "@/components/RoutineTracks";
-import SpecialMission from "@/components/SpecialMission";
-import DayTimeline, { type TimelineEntry } from "@/components/DayTimeline";
-import TaskDrawer, { type DrawerTask } from "@/components/TaskDrawer";
-import {
-  InstructionsCard,
-  MessageVaultCard,
-  QuickLinks,
-  RailCard,
-  RailFooterCard,
-} from "@/components/RailCards";
-import { SectionTitle } from "@/components/shared";
-import { Owl } from "@/components/Owl";
-import TodaySection from "@/components/TodaySection";
-import { Progress } from "@/components/ui/progress";
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
 import {
   isRoutineDoneOn,
   useCompletions,
@@ -43,13 +22,10 @@ import {
   useLinks,
   useMessages,
   useRoutineTasks,
-<<<<<<< HEAD
   useSessions,
   useSetSpecialStatus,
-=======
-  useScheduleItems,
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
   useSpecialTasks,
+  useToggleRoutineDone,
 } from "@/lib/hooks";
 import { specialToDrawer } from "@/lib/taskUtils";
 import {
@@ -72,7 +48,6 @@ import {
   todayWeekday,
   WEEKDAY_NAMES,
 } from "@/lib/time";
-<<<<<<< HEAD
 import {
   FREQUENCY_LABEL,
   FREQUENCY_ORDER,
@@ -96,10 +71,6 @@ function tasksCountText(n: number) {
   if (n === 2) return "لديك مهمتان اليوم";
   return `لديك ${n <= 10 ? `${n} مهام` : `${n} مهمة`} اليوم`;
 }
-=======
-import { scheduleForDay } from "@/lib/commands";
-import { useNow } from "@/lib/useNow";
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
 
 export default function Index() {
   const [name] = useState(() => localStorage.getItem("ng_name") ?? "");
@@ -115,20 +86,13 @@ export default function Index() {
   const { data: routines = [] } = useRoutineTasks();
   const { data: links = [] } = useLinks();
   const { data: messages = [] } = useMessages();
-<<<<<<< HEAD
   const { data: completions = [] } = useCompletions();
   const setStatus = useSetSpecialStatus();
   const toggleRoutine = useToggleRoutineDone();
-=======
-  const { data: instructions = [] } = useInstructions();
-  const { data: completions = [] } = useCompletions();
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
 
-  const now = useNow();
   const today = todayISO();
   const dow = todayWeekday();
 
-<<<<<<< HEAD
   const linkById = Object.fromEntries(links.map((l) => [l.id, l]));
   const msgById = Object.fromEntries(messages.map((m) => [m.id, m]));
 
@@ -646,265 +610,6 @@ export default function Index() {
         message={openSession ? sessionMessage(openSession.session, messages) : null}
         onClose={() => setOpenSession(null)}
       />
-=======
-  const [drawerTask, setDrawerTask] = useState<DrawerTask | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
-  const activeSpecials = specials.filter((s) => s.status === "active");
-
-  /* ===== بناء خط اليوم الزمني ===== */
-  const timeline: TimelineEntry[] = useMemo(() => {
-    const recurring = scheduleForDay(schedule, dow).map((i) => ({
-      id: i.id,
-      time: i.time,
-      title: i.title,
-      kind: "routine" as const,
-      past: timeMinutes(i.time) < nowMinutes(),
-    }));
-    const specialEntries = activeSpecials
-      .filter((s) => s.due_date === today)
-      .map((s) => ({
-        id: s.id,
-        time: s.due_time ?? "—",
-        title: s.title,
-        kind: "special" as const,
-        isSpecial: true,
-        past: !!s.due_time && timeMinutes(s.due_time) < nowMinutes(),
-      }));
-    return [...recurring, ...specialEntries].sort(
-      (a, b) => timeMinutes(a.time) - timeMinutes(b.time),
-    );
-  }, [schedule, activeSpecials, dow, today]);
-
-  /* ===== مهام اليوم ===== */
-  const daily = routines.filter((r) => r.frequency === "daily");
-  const dailyDone = daily.filter((r) =>
-    isTaskDone(completions, r.id, r.frequency),
-  ).length;
-
-  const todayTasksCount =
-    timeline.length + daily.filter((r) => !isTaskDone(completions, r.id, r.frequency)).length;
-
-  const clock = now.toLocaleTimeString("ar-EG-u-nu-latn", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  const greeting =
-    now.getHours() >= 5 && now.getHours() < 12
-      ? { text: "صباح الخير 👋", sub: "نهار موفق يبدأ بخطوة منظمة" }
-      : now.getHours() >= 12 && now.getHours() < 17
-        ? { text: "نهار سعيد 👋", sub: "كل ما تحتاجه لتنفيذ مهامك في مكان واحد" }
-        : { text: "مساء الخير 👋", sub: "أنهِ يومك بنفس تنظيم بدايته" };
-
-  const openDrawer = (task: DrawerTask) => {
-    setDrawerTask(task);
-    setDrawerOpen(true);
-  };
-
-  return (
-    <div>
-
-      {/* ===== ترويسة الترحيب + البومة ===== */}
-      <section className="relative mb-6 overflow-hidden rounded-2xl border border-sky-200 bg-sky-700 p-5 text-white shadow-sm sm:p-7">
-        <div aria-hidden className="absolute -left-14 -top-16 h-48 w-48 rounded-full bg-white/10" />
-        <div aria-hidden className="absolute -bottom-12 right-1/3 h-28 w-40 rounded-full bg-cyan-400/20" />
-
-        <div className="relative flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <h1 className="font-display text-[26px] font-extrabold leading-tight sm:text-3xl">
-              {greeting.text}
-            </h1>
-            <p className="mt-1 text-sm font-bold text-sky-50/95">
-              كل ما تحتاجه لتنفيذ مهامك في مكان واحد — والواجهة نفسها دليلك.
-            </p>
-
-            {/* مؤشر الحالة */}
-            <div className="mt-3.5 flex flex-wrap items-center gap-2">
-              <span className="flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-[12px] font-extrabold backdrop-blur-sm">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute h-full w-full animate-ping-soft rounded-full bg-emerald-300" />
-                  <span className="relative h-2 w-2 rounded-full bg-emerald-300" />
-                </span>
-                العمل منظم
-              </span>
-              <span className="rounded-full bg-white/20 px-3 py-1 text-[12px] font-extrabold backdrop-blur-sm">
-                {todayTasksCount > 0
-                  ? `${todayTasksCount} مهام اليوم`
-                  : "لا مهام عاجلة اليوم"}
-              </span>
-              <span className="rounded-full bg-white/20 px-3 py-1 font-display text-[12px] font-extrabold tabular-nums backdrop-blur-sm">
-                {clock}
-              </span>
-            </div>
-          </div>
-
-          <div className="hidden shrink-0 flex-col items-center sm:flex">
-            <div className="animate-float-y">
-              <Owl size={110} pose="wave" />
-            </div>
-            <span className="mt-1 rounded-full bg-white/20 px-3 py-1 font-display text-[11px] font-extrabold backdrop-blur-sm">
-              مرشدك NG 🦉
-            </span>
-          </div>
-        </div>
-
-        {/* التاريخ */}
-        <div className="relative mt-4 flex flex-wrap items-center gap-2 text-[12px] font-extrabold text-sky-50/90">
-          <span className="rounded-full bg-white/15 px-3 py-1 backdrop-blur-sm">
-            {WEEKDAY_NAMES[dow]}، {formatArabicDate(today)}
-          </span>
-        </div>
-      </section>
-
-      {/* ===== التخطيط: Rail (أقصى اليمين) + مساحة العمل ===== */}
-      <div className="flex flex-col gap-8 xl:flex-row">
-        {/* ——— Smart Utility Rail ——— */}
-        <aside className="order-2 min-w-0 space-y-4 xl:order-1 xl:sticky xl:top-8 xl:w-[280px] xl:shrink-0 xl:self-start">
-          <RailCard emoji="🔗" title="روابطك" actionTo="/links" actionLabel="الكل">
-            <QuickLinks links={links} />
-          </RailCard>
-
-          <RailCard emoji="💬" title="Message Vault" actionTo="/messages" actionLabel="الخزنة">
-            <MessageVaultCard messages={messages} />
-          </RailCard>
-
-          <RailCard emoji="📌" title="تعليمات مهمة" actionTo="/rules">
-            <InstructionsCard instructions={instructions} />
-          </RailCard>
-
-          <RailFooterCard />
-        </aside>
-
-        {/* ——— العمود الرئيسي ——— */}
-        <div className="order-1 min-w-0 flex-1 space-y-8 xl:order-2">
-          {/* 01 — ماذا أفعل الآن */}
-          <section className="scroll-mt-24" id="now">
-            <NowCard />
-          </section>
-
-          {/* 02 — نظامك المعتاد */}
-          <section>
-            <SectionTitle
-              emoji="🔄"
-              title="نظامك المعتاد"
-              desc="ثلاثة مسارات متصلة: يومي، أسبوعي، شهري — أفعالك التي لا تحتاج تفكيرًا"
-              actionTo="/routine"
-              actionLabel="كل الروتين"
-            />
-            <RoutineTracks routines={routines} />
-          </section>
-
-          {/* 03 — شيء مختلف اليوم؟ */}
-          <section>
-            <SpecialMission
-              specials={specials}
-              onOpen={(task) =>
-                openDrawer({
-                  kind: "special",
-                  id: task.id,
-                  title: task.title,
-                  time: task.due_time,
-                  date: task.due_date,
-                  steps: task.steps,
-                  notes: task.notes,
-                  done: false,
-                })
-              }
-            />
-          </section>
-
-          {/* 04 — الخط الزمني الذكي */}
-          <section>
-            <SectionTitle
-              emoji="◷"
-              title="يومك على الخط الزمني"
-              desc="سلسلتي اليوم: المعتاد 🔄 والمهمة الخاصة ⭐ — اضغط أي محطة للتفاصيل"
-              actionTo="/schedule"
-              actionLabel="الجدول الكامل"
-            />
-            <DayTimeline
-              entries={timeline}
-              onOpen={(entry) =>
-                openDrawer({
-                  kind: entry.isSpecial ? "special" : "scheduled",
-                  id: entry.id,
-                  title: entry.title,
-                  time: entry.time,
-                  date: today,
-                  steps: [],
-                  done: entry.past,
-                })
-              }
-            />
-          </section>
-
-          {/* 05 — مهام اليوم المعتادة السريعة */}
-          <TodaySection
-            daily={daily}
-            completions={completions}
-            onOpenRoutine={(task) =>
-              openDrawer({
-                kind: "routine",
-                id: task.id,
-                title: task.title,
-                steps: task.steps,
-                when_note: task.when_note,
-                what_note: task.what_note,
-                frequency: task.frequency,
-                done: isTaskDone(completions, task.id, task.frequency),
-              })
-            }
-          />
-
-          {/* شريط إنجاز اليوم */}
-          {daily.length > 0 && (
-            <section className="card-soft flex items-center gap-4 p-4 sm:p-5">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 font-display text-sm font-extrabold text-white shadow-soft-sm">
-                {Math.round((dailyDone / daily.length) * 100)}
-                %
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="mb-1.5 flex items-center justify-between text-xs font-extrabold">
-                  <span className="text-slate-500">إنجاز مهام اليوم المعتادة</span>
-                  <span className="text-emerald-600">
-                    {dailyDone} / {daily.length}
-                  </span>
-                </div>
-                <Progress
-                  value={(dailyDone / daily.length) * 100}
-                  className="h-2.5 bg-slate-100"
-                />
-              </div>
-              <Link
-                to="/routine"
-                className="press hidden h-9 shrink-0 items-center rounded-full bg-emerald-50 px-4 font-display text-xs font-extrabold text-emerald-600 transition hover:bg-emerald-100 sm:flex"
-              >
-                أكمل الآن
-              </Link>
-            </section>
-          )}
-
-          {/* احتفال الاكتمال */}
-          {daily.length > 0 && dailyDone === daily.length && (
-            <div className="flex animate-pop-in items-center justify-center gap-3 rounded-[24px] border border-emerald-200 bg-gradient-to-l from-emerald-50 to-sky-50/60 p-4">
-              <div className="animate-float-y">
-                <Owl size={64} pose="cheer" />
-              </div>
-              <div>
-                <p className="font-display text-base font-extrabold text-emerald-700">
-                  مبروك! أنجزت كل مهام اليوم 🎉
-                </p>
-                <p className="text-xs font-bold text-slate-400">
-                  البومة فخورة بك — استرح أو قدّم يوم الغد
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-
-      </div>
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
     </div>
   );
 }

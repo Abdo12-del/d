@@ -48,14 +48,8 @@ export default function Messages() {
   return (
     <div className="space-y-5">
       <PageHeader
-<<<<<<< HEAD
         title="مكتبة الرسائل"
         desc="ماذا أرسل؟ رسائل جاهزة تُنسخ بضغطة — لا تغيّر نصها إلا إذا طُلب منك."
-=======
-        icon={MessagesSquare}
-        title="Message Vault 💬"
-        desc="خزنة الرسائل الجاهزة — انسخ بضغطة واحدة ولا تغيّر النص إلا إذا طُلب منك."
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
       />
 
       <SegmentedControl
@@ -83,7 +77,6 @@ export default function Messages() {
           {list.map((msg) => (
             <div
               key={msg.id}
-<<<<<<< HEAD
               className="flex items-center gap-4 px-5 py-4 transition hover:bg-sky-50/30"
             >
               <button
@@ -110,26 +103,6 @@ export default function Messages() {
               >
                 <Copy className="h-4 w-4" />
               </button>
-=======
-              className="rounded-[24px] border border-sky-100 bg-white p-4 shadow-soft sm:p-5"
-            >
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <h3 className="font-display text-base font-extrabold text-sky-950">
-                  {msg.title}
-                </h3>
-                <span
-                  className={`rounded-full px-2.5 py-0.5 font-display text-[11px] font-extrabold ring-1 ${CATEGORY_STYLE[msg.category]}`}
-                >
-                  {CATEGORY_LABEL[msg.category]}
-                </span>
-              </div>
-              <div className="relative mt-3 select-text whitespace-pre-line rounded-2xl rounded-tr-md border border-sky-100 bg-gradient-to-b from-sky-50/70 to-white p-4 text-sm font-semibold leading-loose text-slate-600">
-                {msg.body}
-              </div>
-              <div className="mt-3 flex justify-end">
-                <CopyButton text={msg.body} />
-              </div>
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
             </div>
           ))}
         </ListContainer>

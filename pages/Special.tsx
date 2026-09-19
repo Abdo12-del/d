@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Archive, ChevronDown, Star } from "lucide-react";
+import { toast } from "sonner";
 import {
   Collapsible,
   CollapsibleContent,
@@ -10,6 +11,7 @@ import SpecialMission from "@/components/SpecialMission";
 import { Button } from "@/components/ui/button";
 import { EmptyState, PageHeader } from "@/components/shared";
 import { useSetSpecialStatus, useSpecialTasks } from "@/lib/hooks";
+import { specialToDrawer } from "@/lib/taskUtils";
 import { dayRelativeLabel, timeMinutes } from "@/lib/time";
 import type { SpecialTask } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -32,24 +34,35 @@ export default function Special() {
   const [archivedOpen, setArchivedOpen] = useState(false);
 
   const [drawerTask, setDrawerTask] = useState<DrawerTask | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const active = tasks.filter((t) => t.status === "active").sort(sortSpecials);
   const done = tasks.filter((t) => t.status === "done").sort(sortSpecials);
   const archived = tasks.filter((t) => t.status === "archived");
 
   const openTask = (task: SpecialTask) => {
-    setDrawerTask({
-      kind: "special",
-      id: task.id,
-      title: task.title,
-      time: task.due_time,
-      date: task.due_date,
-      steps: task.steps,
-      notes: task.notes,
-      done: task.status === "done",
-    });
-    setDrawerOpen(true);
+    setDrawerTask(
+      specialToDrawer(task, {
+        onToggleDone: () => {
+          const makeDone = task.status !== "done";
+          setStatus.mutate(
+            { id: task.id, status: makeDone ? "done" : "active" },
+            {
+              onSuccess: () =>
+                toast.success(
+                  makeDone ? "أحسنت! تم إنجاز المهمة" : "تمت الإرجاع",
+                ),
+            },
+          );
+        },
+        onArchive: () => {
+          setStatus.mutate(
+            { id: task.id, status: "archived" },
+            { onSuccess: () => toast.success("تمت الأرشفة") },
+          );
+          setDrawerTask(null);
+        },
+      }),
+    );
   };
 
   return (
@@ -157,16 +170,7 @@ export default function Special() {
         />
       )}
 
-      <TaskDrawer
-        task={drawerTask}
-        open={drawerOpen}
-        onOpenChange={setDrawerOpen}
-        onComplete={(task) => {
-          setStatus.mutate({ id: task.id, status: "done" });
-          setDrawerOpen(false);
-        }}
-        completing={setStatus.isPending}
-      />
+      <TaskDrawer task={drawerTask} onClose={() => setDrawerTask(null)} />
     </div>
   );
 }

@@ -145,7 +145,6 @@ export default function Guide() {
             return (
               <section
                 key={guide.id}
-<<<<<<< HEAD
                 className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-soft sm:p-6"
               >
                 <h2 className="flex items-center gap-2.5 text-base font-black text-slate-700">
@@ -170,33 +169,6 @@ export default function Guide() {
                         <StepsList steps={section.steps} />
                       </div>
                     ))}
-=======
-                className="overflow-hidden rounded-[26px] border border-violet-100 bg-white shadow-soft"
-              >
-                <div className="flex items-center gap-3 border-b border-violet-100 bg-gradient-to-l from-violet-50 to-white px-4 py-4 sm:px-5">
-                  <span className="flex h-11 w-11 shrink-0 -rotate-3 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-purple-500 text-white shadow-soft-sm">
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <h2 className="font-display text-base font-extrabold text-violet-950 sm:text-lg">
-                    {guide.title}
-                  </h2>
-                </div>
-                <div className="grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-3 sm:p-5">
-                  {guide.sections.map((section, i) => (
-                    <div
-                      key={i}
-                      className="rounded-2xl border border-sky-100 bg-sky-50/40 p-4"
-                    >
-                      <h3 className="mb-3 flex items-center gap-2 font-display text-sm font-extrabold text-violet-700">
-                        <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-purple-500 font-display text-[11px] font-extrabold text-white shadow-soft-sm">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        {section.heading}
-                      </h3>
-                      <StepsList steps={section.steps} small />
-                    </div>
-                  ))}
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
                 </div>
               </section>
             );

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { useState } from "react";
 import { toast } from "sonner";
 import SessionSheet from "@/components/SessionSheet";
@@ -17,27 +16,10 @@ import {
   useMessages,
   useRoutineTasks,
   useSessions,
-=======
-import { useMemo, useState } from "react";
-import { Check, ListChecks } from "lucide-react";
-import { Link } from "react-router-dom";
-import DayTimeline, { type TimelineEntry } from "@/components/DayTimeline";
-import NowCard from "@/components/NowCard";
-import TaskDrawer, { type DrawerTask } from "@/components/TaskDrawer";
-import { EmptyState, PageHeader, SectionTitle } from "@/components/shared";
-import { Progress } from "@/components/ui/progress";
-import { cn } from "@/lib/utils";
-import {
-  isTaskDone,
-  useCompletions,
-  useRoutineTasks,
-  useScheduleItems,
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
   useSetSpecialStatus,
   useSpecialTasks,
   useToggleRoutineDone,
 } from "@/lib/hooks";
-<<<<<<< HEAD
 import { specialToDrawer } from "@/lib/taskUtils";
 import {
   routineOccurrenceDrawer,
@@ -373,179 +355,6 @@ export default function Tasks() {
         }
         onClose={() => setOpenSession(null)}
       />
-=======
-import {
-  formatArabicDate,
-  nowMinutes,
-  timeMinutes,
-  todayISO,
-  todayWeekday,
-  WEEKDAY_NAMES,
-} from "@/lib/time";
-import { scheduleForDay } from "@/lib/commands";
-
-/** صفحة «المهام» — كل ما يخص اليوم فقط: الآن، الخط الزمني، وقائمة اليومية */
-export default function Tasks() {
-  const { data: specials = [] } = useSpecialTasks();
-  const { data: schedule = [] } = useScheduleItems();
-  const { data: routines = [] } = useRoutineTasks();
-  const { data: completions = [] } = useCompletions();
-  const toggleDone = useToggleRoutineDone();
-  const setStatus = useSetSpecialStatus();
-
-  const [drawerTask, setDrawerTask] = useState<DrawerTask | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
-  const today = todayISO();
-  const dow = todayWeekday();
-
-  const timeline: TimelineEntry[] = useMemo(
-    () => [
-      ...scheduleForDay(schedule, dow).map((i) => ({
-        id: i.id,
-        time: i.time,
-        title: i.title,
-        kind: "routine" as const,
-        past: timeMinutes(i.time) < nowMinutes(),
-      })),
-      ...specials
-        .filter((s) => s.status === "active" && s.due_date === today)
-        .map((s) => ({
-          id: s.id,
-          time: s.due_time ?? "—",
-          title: s.title,
-          kind: "special" as const,
-          isSpecial: true,
-          past: !!s.due_time && timeMinutes(s.due_time) < nowMinutes(),
-        })),
-    ].sort((a, b) => timeMinutes(a.time) - timeMinutes(b.time)),
-    [schedule, specials, dow, today],
-  );
-
-  const daily = routines.filter((r) => r.frequency === "daily");
-  const dailyDone = daily.filter((r) => isTaskDone(completions, r.id, r.frequency)).length;
-
-  return (
-    <div className="space-y-7">
-
-      <PageHeader
-        icon={ListChecks}
-        title="مهام اليوم"
-        desc={`${WEEKDAY_NAMES[dow]}، ${formatArabicDate(today)} — كل ما يُنتظر منك اليوم في مكان واحد.`}
-      />
-
-      <NowCard />
-
-      <section>
-        <SectionTitle
-          emoji="◷"
-          title="الخط الزمني لليوم"
-          desc="المحطات بالترتيب — المعتاد 🔄 والخاص ⭐"
-          actionTo="/schedule"
-          actionLabel="الجدول الأسبوعي"
-        />
-        <DayTimeline
-          entries={timeline}
-          onOpen={(entry) => {
-            setDrawerTask({
-              kind: entry.isSpecial ? "special" : "scheduled",
-              id: entry.id,
-              title: entry.title,
-              time: entry.time,
-              date: today,
-              steps: [],
-              done: entry.past,
-            });
-            setDrawerOpen(true);
-          }}
-        />
-      </section>
-
-      <section>
-        <SectionTitle
-          emoji="✓"
-          title="قائمة اليومية"
-          desc="علّم على ما تنجزه — البومة تتابع معك"
-          actionTo="/routine"
-          actionLabel="كل الروتين"
-        />
-        {daily.length === 0 ? (
-          <EmptyState
-            title="لا مهام يومية بعد"
-            hint="أضفها من صفحة الإدارة ليبدأ عدّاد إنجازك"
-          />
-        ) : (
-          <>
-            <div className="card-soft mb-3 flex items-center gap-3 p-3.5">
-              <Progress
-                value={(dailyDone / daily.length) * 100}
-                className="h-2.5 flex-1 bg-slate-100"
-              />
-              <span className="font-display text-xs font-extrabold text-emerald-600">
-                {dailyDone} / {daily.length}
-              </span>
-            </div>
-            <div className="grid gap-2.5 sm:grid-cols-2">
-              {daily.map((task) => {
-                const done = isTaskDone(completions, task.id, task.frequency);
-                return (
-                  <button
-                    key={task.id}
-                    onClick={() => toggleDone.mutate({ task, makeDone: !done })}
-                    className={cn(
-                      "press flex items-center gap-3 rounded-2xl border bg-white p-3.5 text-right shadow-soft-sm transition hover:bg-sky-50/40",
-                      done ? "border-emerald-200 bg-emerald-50/40" : "border-sky-100",
-                    )}
-                  >
-                    <span
-                      className={cn(
-                        "flex h-8 w-8 shrink-0 items-center justify-center rounded-xl transition",
-                        done
-                          ? "animate-check-pop bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-soft-sm"
-                          : "border-2 border-dashed border-sky-200 text-transparent",
-                      )}
-                    >
-                      <Check className="h-4 w-4" strokeWidth={3.5} />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span
-                        className={cn(
-                          "block truncate font-display text-sm font-extrabold",
-                          done ? "text-emerald-700 line-through decoration-emerald-300" : "text-sky-950",
-                        )}
-                      >
-                        {task.title}
-                      </span>
-                      {task.when_note && (
-                        <span className="block truncate text-[11px] font-semibold text-slate-400">
-                          {task.when_note}
-                        </span>
-                      )}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </>
-        )}
-      </section>
-
-      <TaskDrawer
-        task={drawerTask}
-        open={drawerOpen}
-        onOpenChange={setDrawerOpen}
-        onComplete={(task) => {
-          if (task.kind === "special") {
-            setStatus.mutate({ id: task.id, status: "done" });
-          }
-          setDrawerOpen(false);
-        }}
-      />
-
-      <p className="pb-2 text-center text-[11px] font-bold text-slate-300">
-        NG Academy — مركز مهام المساعد
-      </p>
->>>>>>> c683bf5f3d8ed3a7fc6b1bf2ec146ec0c53ce734
     </div>
   );
 }
