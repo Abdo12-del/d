@@ -15,6 +15,9 @@ import Files from "@/pages/Files";
 import Guide from "@/pages/Guide";
 import Settings from "@/pages/Settings";
 import Admin from "@/pages/Admin";
+import Special from "@/pages/Special";
+import Rules from "@/pages/Rules";
+import Help from "@/pages/Help";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient({
@@ -45,6 +48,9 @@ const App = () => (
             <Route path="/messages" element={<Messages />} />
             <Route path="/files" element={<Files />} />
             <Route path="/guide" element={<Guide />} />
+            <Route path="/special" element={<Special />} />
+            <Route path="/rules" element={<Rules />} />
+            <Route path="/help" element={<Help />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/admin" element={<Admin />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
