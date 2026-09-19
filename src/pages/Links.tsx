@@ -1,4 +1,5 @@
 import { ExternalLink } from "lucide-react";
+import { externalHref } from "@/lib/utils";
 import { EmptyState, LoadingRows, PageHeader } from "@/components/shared";
 import { iconByName } from "@/lib/icons";
 import { useLinks } from "@/lib/hooks";
@@ -42,7 +43,7 @@ export default function Links() {
                     return (
                       <a
                         key={link.id}
-                        href={link.url}
+                        href={externalHref(link.url)}
                         target="_blank"
                         rel="noreferrer"
                         className="group flex items-center gap-4 px-5 py-4 transition hover:bg-sky-50/40"

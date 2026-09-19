@@ -5,6 +5,7 @@ import {
   ExternalLink,
   RotateCcw,
 } from "lucide-react";
+import { externalHref } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -97,7 +98,7 @@ export default function TaskDrawer({
                     الرابط المرتبط
                   </h4>
                   <a
-                    href={task.link.url}
+                    href={externalHref(task.link.url)}
                     target="_blank"
                     rel="noreferrer"
                     className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 px-4 py-3 transition hover:border-sky-300 hover:bg-sky-50/50"

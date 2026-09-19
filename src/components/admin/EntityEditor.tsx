@@ -35,7 +35,7 @@ import { removeRow, saveRow, selectAll } from "@/lib/data";
 import { useMessages } from "@/lib/hooks";
 import { WEEKDAY_NAMES, WEEK_ORDER } from "@/lib/time";
 import type { GuideSection } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { cn, externalHref } from "@/lib/utils";
 import type { FieldDef, ResourceConfig, Row } from "./configs";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -557,9 +557,12 @@ function buildPayload(config: ResourceConfig, draft: Row): Row {
             }))
             .filter((s) => s.heading)
         : [];
-    } else if (field.type === "text" || field.type === "textarea" || field.type === "url") {
+    } else if (field.type === "text" || field.type === "textarea") {
       payload[field.key] = typeof v === "string" ? v.trim() : v;
       if (payload[field.key] === "") payload[field.key] = null;
+    } else if (field.type === "url") {
+      const u = typeof v === "string" ? v.trim() : "";
+      payload[field.key] = u === "" ? null : externalHref(u);
     } else if (field.type === "date" || field.type === "time") {
       if (!v) payload[field.key] = null;
     } else if (field.type === "select" && field.coerceInt) {

@@ -7,6 +7,7 @@ import {
   MonitorPlay,
   type LucideIcon,
 } from "lucide-react";
+import { externalHref } from "@/lib/utils";
 import { useState } from "react";
 import {
   EmptyState,
@@ -80,7 +81,7 @@ export default function Files() {
             return (
               <a
                 key={file.id}
-                href={file.url}
+                href={externalHref(file.url)}
                 target="_blank"
                 rel="noreferrer"
                 className="group flex items-center gap-4 px-5 py-4 transition hover:bg-sky-50/40"

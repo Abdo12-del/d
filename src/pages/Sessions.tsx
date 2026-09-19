@@ -1,4 +1,5 @@
 import { ExternalLink, Users, Video } from "lucide-react";
+import { externalHref } from "@/lib/utils";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import SessionSheet from "@/components/SessionSheet";
@@ -103,7 +104,7 @@ export default function Sessions() {
                             className="h-9 gap-1.5 rounded-xl bg-sky-500 px-3.5 text-xs font-extrabold text-white hover:bg-sky-600"
                           >
                             <a
-                              href={s.meet_url}
+                              href={externalHref(s.meet_url)}
                               target="_blank"
                               rel="noreferrer"
                             >

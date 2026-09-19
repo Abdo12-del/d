@@ -1,4 +1,5 @@
 import { Check, ChevronLeft, Clock, ExternalLink, Users } from "lucide-react";
+import { externalHref } from "@/lib/utils";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
@@ -322,7 +323,7 @@ export default function Index() {
                     className="h-10 gap-1.5 rounded-xl bg-sky-500 px-4 text-[13px] font-extrabold text-white hover:bg-sky-600"
                   >
                     <a
-                      href={currentSession.s.meet_url}
+                      href={externalHref(currentSession.s.meet_url)}
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -577,7 +578,7 @@ export default function Index() {
               return (
                 <a
                   key={link.id}
-                  href={link.url}
+                  href={externalHref(link.url)}
                   target="_blank"
                   rel="noreferrer"
                   className="group flex w-44 shrink-0 items-center gap-3 rounded-2xl border border-slate-200/80 bg-white px-4 py-3.5 shadow-soft transition hover:border-sky-300 sm:w-auto"

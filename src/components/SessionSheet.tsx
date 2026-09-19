@@ -8,6 +8,7 @@ import {
   MessageSquare,
   Users,
 } from "lucide-react";
+import { externalHref } from "@/lib/utils";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -102,7 +103,7 @@ export default function SessionSheet({
               {/* الرابط */}
               {session.meet_url ? (
                 <a
-                  href={session.meet_url}
+                  href={externalHref(session.meet_url)}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center justify-between gap-3 rounded-xl border border-sky-200 bg-sky-50/60 px-4 py-3.5 transition hover:bg-sky-100/60"
@@ -152,7 +153,7 @@ export default function SessionSheet({
                   asChild
                   className="h-11 flex-1 gap-1.5 rounded-xl bg-sky-500 text-[13px] font-extrabold text-white hover:bg-sky-600"
                 >
-                  <a href={session.meet_url} target="_blank" rel="noreferrer">
+                  <a href={externalHref(session.meet_url)} target="_blank" rel="noreferrer">
                     <ExternalLink className="h-4 w-4" />
                     دخول إلى Google Meet
                   </a>
